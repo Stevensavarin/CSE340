@@ -276,6 +276,36 @@ footer {
   font-weight: bold;
 }
 
+/*ITEM DETAILS*/
+.vehicle-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+  
+.vehicle-detail .vehicle-image-container p{
+    font-size: 16px;
+}
+
+.price-tag {
+    margin-top: 0;
+}
+
+.price-tag h2 {
+    font-size: 24px;
+}
+
+.price-tag p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.description-tag {
+    color: var(--text-main);
+    font-size: 16px;
+}
+
+
 /* Responsive para pantallas ≥800px */
 @media (min-width: 800px) {
   body {
