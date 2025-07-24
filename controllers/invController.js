@@ -7,20 +7,24 @@ const invCont = {}
  *  Build inventory by classification view
  * ************************** */
 invCont.buildByClassificationId = async function (req, res, next) {
-  const classification_id = req.params.classificationId
-  const data = await invModel.getInventoryByClassificationId(classification_id)
-  const grid = await utilities.buildClassificationGrid(data)
-  let nav = await utilities.getNav()
-  const className = data[0].classification_name
+  const classification_id = req.params.classificationId;
+  if (!/^\d+$/.test(classification_id)) {
+    return next({ status: 400});
+  }
+  const data = await invModel.getInventoryByClassificationId(classification_id);
+  const grid = await utilities.buildClassificationGrid(data);
+  let nav = await utilities.getNav();
+  const className = data && data[0] ? data[0].classification_name : "Unknown";
   res.render("./inventory/classification", {
     title: className + " vehicles",
     nav,
     grid,
-  })
+    errors: null,
+  });
 }
 
 /* ***************************
- *  Build vehicle detail view *
+ *  Build vehicle detail view
  * ************************** */
 invCont.buildDetailView = async function (req, res, next) {
   const inv_id = req.params.invId;
@@ -35,6 +39,7 @@ invCont.buildDetailView = async function (req, res, next) {
     title,
     nav,
     detail,
+    errors: null,
   });
 }
 
