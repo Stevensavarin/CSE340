@@ -1,0 +1,33 @@
+<h1><%= title %></h1>
+    
+<%- messages() %>
+<% if (errors && !errors.isEmpty()) { %>
+  <ul>
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form id="loginForm" action="/account/login" method="post">
+    <label for="email">Email:</label>
+    <input type="email" name="account_email" id="accountEmail" required value="<%= locals.account_email ? locals.account_email : '' %>">
+    <label for="password">Password:</label>
+    <small>
+        minmum 12 chars, 1 capital, 1 number and 1 special char!
+    </small>
+    <div>
+        <input 
+            type="password" id="pword" name="account_password" placeholder="Enter a valid email address" 
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+        required>
+        <button type="button" id="pswdBtn">Show</button>
+    </div>
+    <button type="submit">LOGIN</button>
+    <p>
+        No account?
+        <a href="/account/registration">Sign-up</a>
+    </p>
+</form>
+
+<script src="/js/passwordHider.js"></script>
