@@ -1,9 +1,8 @@
 <h1><%= title %></h1>
     
 <%- messages() %>
-
-<% if (errors) { %>
-  <ul class="notice">
+<% if (errors && !errors.isEmpty()) { %>
+  <ul>
     <% errors.array().forEach(error => { %>
       <li><%= error.msg %></li>
     <% }) %>
@@ -12,7 +11,7 @@
 
 <form id="loginForm" action="/account/login" method="post">
     <label for="email">Email:</label>
-    <input type="email" name="account_email" required>
+    <input type="email" name="account_email" id="accountEmail" required value="<%= locals.account_email ? locals.account_email : '' %>">
     <label for="password">Password:</label>
     <small>
         minmum 12 chars, 1 capital, 1 number and 1 special char!

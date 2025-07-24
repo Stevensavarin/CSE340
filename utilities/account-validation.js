@@ -35,7 +35,7 @@ const accountModel = require("../models/account-model")
           if (emailExists){
             throw new Error("Email exists. Please log in or use different email")
           }
-        }),
+      }),
   
       // password is required and must be strong password
       body("account_password")
@@ -51,7 +51,6 @@ const accountModel = require("../models/account-model")
         .withMessage("Password does not meet requirements."),
     ]
   }
-
 
 
 /* ******************************
@@ -103,6 +102,45 @@ validate.loginRules = () => {
 /* ******************************
  * Check login data and return errors or continue to login
  * ***************************** */
+validate.checkLoginData = async (req, res, next) => {
+  const { account_email } = req.body
+  let errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    res.render("account/login", {
+      errors,
+      title: "Login",
+      nav,
+      account_email,
+    })
+    return
+  }
+  next()
+}
+
+/* **
+Login Data Validation Rules
+**/
+validate.loginRules = () => {
+  return [
+    // email is required and must be valid
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Please provide a valid email address."),
+
+    // password is required, but no need to check strength here (just not empty)
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide your password."),
+  ]
+}
+
+/* **
+Check login data and return errors or continue to login
+**/
 validate.checkLoginData = async (req, res, next) => {
   const { account_email } = req.body
   let errors = validationResult(req)
