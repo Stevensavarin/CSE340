@@ -11,20 +11,22 @@
   --inventory-item-bg: #EDF2F7;
 }
 
-/******* Change Box Model ***************/
+/* Box Model + Fuente Global */
 *,
-*::before,
-*::after {
+*:before,
+*:after {
   box-sizing: border-box;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
 }
 
 html, body {
   margin: 0;
   padding: 0;
-  font-family: "Poppins", sans-serif;
 }
 
-/* ===== Header & Global Typography ===== */
 header {
   display: flex;
   justify-content: space-between;
@@ -43,17 +45,6 @@ header {
   color: var(--text-main);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  color: var(--text-main);
-}
-
-p, a, button, li, label, small {
-  margin: 0;
-  color: var(--text-main);
-}
-
-/* ===== Navigation ===== */
 nav {
   background-color: var(--primary-bg);
   padding: 10px 0;
@@ -63,8 +54,9 @@ nav ul {
   display: flex;
   justify-content: space-evenly;
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
 }
 
 nav li {
@@ -77,16 +69,15 @@ nav li a {
   text-decoration: none;
 }
 
-/* ===== Main ===== */
 main {
   padding: 0 10px;
 }
 
 h1 {
   font-size: 22px;
+  color: var(--text-main);
 }
 
-/* ===== Delorean Component ===== */
 .delorean-container {
   position: relative;
   width: 100%;
@@ -129,6 +120,7 @@ h1 {
   background-color: var(--primary-accent);
   color: var(--text-light);
   border: none;
+  outline: none;
   padding: 0.5rem 1.25rem;
   border-radius: 6px;
   font-size: 16px;
@@ -140,7 +132,6 @@ h1 {
   background-color: var(--button-hover);
 }
 
-/* ===== Grids & Reviews ===== */
 .multiple-grid > div {
   margin-bottom: 40px;
 }
@@ -153,15 +144,14 @@ h1 {
 
 .reviews-container ul li {
   font-size: 16px;
-  margin-bottom: 0.75em;
   color: var(--text-main);
+  margin-bottom: 0.75em;
 }
 
 .reviews-container ul li::marker {
   color: var(--marker-color);
 }
 
-/* ===== Upgrades Grid ===== */
 #upgradesGrid {
   display: grid;
   gap: 10px;
@@ -189,6 +179,7 @@ h1 {
   width: auto;
   object-fit: contain;
   border-radius: 6px;
+  display: block;
   background: var(--primary-accent);
   padding: 5px;
 }
@@ -199,13 +190,12 @@ h1 {
   font-size: 16px;
 }
 
-/* ===== Footer ===== */
 footer {
   padding-left: 10px;
   color: var(--text-main);
 }
 
-/* ===== Inventory List ===== */
+/* INVENTORY ITEMS */
 #inv-display {
   list-style: none;
   padding: 0;
@@ -244,7 +234,7 @@ footer {
 }
 
 .namePrice h2 {
-  margin: 0 0 4px;
+  margin: 0 0 4px 0;
   font-size: 16px;
 }
 
@@ -254,11 +244,11 @@ footer {
 
 .namePrice span {
   font-size: 14px;
-  font-weight: bold;
   color: var(--text-main);
+  font-weight: bold;
 }
 
-/* ===== Item Detail ===== */
+/* ITEM DETAILS */
 #itemInfoTitle {
   text-align: center;
 }
@@ -285,7 +275,8 @@ footer {
   background-color: var(--inventory-item-bg);
   padding: 10px;
   border-radius: 8px;
-  /* margin-top: 20px; */
+  color: var(--text-main);
+  margin-top: 20px;
 }
 
 .price-tag h2 {
@@ -299,13 +290,13 @@ footer {
 }
 
 .description-tag {
-  font-size: 14px;
   color: var(--text-main);
+  font-size: 14px;
 }
 
-/* ===== LOGIN FORM ===== */
+/* FORMS */
 form {
-  background-color: #ff25259c;
+  background-color: var(--primary-accent);
   padding: 14px 40px;
   display: flex;
   flex-direction: column;
@@ -319,12 +310,11 @@ form label {
   font-weight: bold;
 }
 
-form input {
+form input, form textarea, form select {
   margin-bottom: 12px;
   font-size: 20px;
   padding: 4px;
   border-radius: 6px;
-  border: none;
 }
 
 form small {
@@ -340,10 +330,6 @@ form #pswdBtn {
   padding: 4px;
   border-radius: 6px;
   width: 9%;
-  background: none;
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
 }
 
 form button[type="submit"] {
@@ -351,11 +337,8 @@ form button[type="submit"] {
   font-size: 16px;
   padding: 4px;
   border-radius: 9999px;
-  margin: 14px auto 0;
-  background: var(--text-light);
-  color: var(--primary-accent);
-  border: none;
-  cursor: pointer;
+  margin: 0 auto 14px;
+  display: block;
 }
 
 form p {
@@ -368,13 +351,34 @@ form p a {
   color: var(--text-light);
 }
 
-input:required:invalid,
-input:focus:invalid {
+input:required:invalid, input:focus:invalid,
+textarea:required:invalid, textarea:focus:invalid,
+select:required:invalid, select:focus:invalid {
   border-left: 6px solid red;
 }
 
-input:required:valid {
+input:required:valid,
+textarea:required:valid,
+select:required:valid {
   border-left: 6px solid green;
+}
+
+/* MANAGEMENT PAGE */
+#managementLinkContainer {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.managementLink {
+  color: var(--text-light);
+  background-color: var(--primary-accent);
+  padding: 12px;
+  margin: 6px;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 /* ===== RESPONSIVE ≥800px ===== */
@@ -407,8 +411,6 @@ input:required:valid {
 
   h1 {
     font-size: 28px;
-    margin-top: 10px;
-    margin-bottom: 10px;
   }
 
   .delorean-info {
@@ -434,6 +436,11 @@ input:required:valid {
     grid-template-columns: 1fr 1fr;
   }
 
+  .reviews-container {
+    grid-column: 2/3;
+    grid-row: 1/2;
+  }
+
   .reviews-container ul li {
     font-size: 20px;
   }
@@ -443,6 +450,7 @@ input:required:valid {
     grid-row: 1/2;
   }
 
+  /* INVENTORY ITEMS */
   #inv-display {
     gap: 24px;
   }
@@ -459,6 +467,7 @@ input:required:valid {
     font-size: 18px;
   }
 
+  /* ITEM DETAILS */
   .vehicle-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -467,6 +476,10 @@ input:required:valid {
 
   .vehicle-detail .vehicle-image-container p {
     font-size: 16px;
+  }
+
+  .price-tag {
+    margin-top: 0;
   }
 
   .price-tag h2 {
@@ -481,11 +494,12 @@ input:required:valid {
     font-size: 16px;
   }
 
+  /* FORMS */
   form label {
     font-size: 24px;
   }
 
-  form input {
+  form input, form textarea, form select {
     font-size: 24px;
   }
 
@@ -497,10 +511,21 @@ input:required:valid {
     min-width: 140px;
     font-size: 20px;
     padding: 6px;
+    border-radius: 9999px;
   }
 
   form p {
     font-size: 26px;
   }
+
+  /* MANAGEMENT PAGE */
+  #managementLinkContainer {
+    display: block;
+  }
+
+  .managementLink {
+    font-size: 16px;
+  }
 }
+
 
