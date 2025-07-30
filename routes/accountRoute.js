@@ -1,18 +1,15 @@
-// Needed Resources
+// Needed Resources 
+const regValidate = require('../utilities/account-validation')
 const express = require("express")
 const router = new express.Router()
-const utilities = require("../utilities")
+const utilities = require("../utilities/index")
 const accountController = require("../controllers/accountController")
-const regValidate = require('../utilities/account-validation')
 
-
-// Route to build login view
+// Route to show the login view when "My Account" is clicked
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
+// Registration Route
+router.get("/registration", utilities.handleErrors(accountController.buildRegister))
 
-// Route to build register view
-router.get("/register", utilities.handleErrors(accountController.buildRegister))
-
-// Registration route to handle form POST
 // Process the registration data
 router.post(
   "/register",
@@ -20,28 +17,16 @@ router.post(
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
 )
-
-// Process the login attempt
-/*
-router.post(
-  "/login",
-  (req, res) => {
-    res.status(200).send('login process')
-  }
-)
-*/
-
-// Process the login attempt
+// Process the login request
 router.post(
   "/login",
   regValidate.loginRules(),
   regValidate.checkLoginData,
-  (req, res) => {
-    res.status(200).send("Login process")
-  }
+  utilities.handleErrors(accountController.accountLogin)
 )
 
+// Route to account management view
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagement))
 
-// Export the router
 module.exports = router
 
