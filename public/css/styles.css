@@ -74,7 +74,7 @@ main {
 }
 
 h1 {
-  font-size: 22px;
+  /*font-size: 22px;*/
   color: var(--text-main);
 }
 
@@ -333,12 +333,28 @@ form #pswdBtn {
 }
 
 form button[type="submit"] {
-  min-width: 100px;
+  min-width: 150px;
   font-size: 16px;
-  padding: 4px;
+  padding: 8px;
   border-radius: 9999px;
   margin: 0 auto 14px;
   display: block;
+  background-color: var(--text-main);
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button[type="submit"]:not(.update-btn):hover {
+  background-color: var(--primary-bg);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+form button.update-btn:enabled:hover {
+  background-color: var(--primary-bg);
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 form p {
@@ -373,13 +389,42 @@ select:required:valid {
 
 .managementLink {
   color: var(--text-light);
-  background-color: var(--primary-accent);
+  background-color: var(--text-main);
   padding: 12px;
   margin: 6px;
   border-radius: 9999px;
   text-decoration: none;
   font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.managementLink:hover {
+  background-color: var(--primary-bg);
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.classification-select-container {
+  text-align: center;
+}
+
+#classificationList {
+  margin-bottom: 12px;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+h2.management-text {
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+th {
+    font-size: 16px;
+    color: var(--text-main);
+}
+
 
 /* ===== RESPONSIVE ≥800px ===== */
 @media (min-width: 800px) {
@@ -526,6 +571,13 @@ select:required:valid {
   .managementLink {
     font-size: 16px;
   }
+
+  /* ClASSIFICATION */
+
+  #classificationList {
+    font-size: 16px;
+  }
+
 }
 
 
