@@ -38,18 +38,16 @@ Util.buildClassificationGrid = async function(data){
       grid += '<li>'
       grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_thumbnail 
-      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
+      + ' details"><img src="' + vehicle.inv_thumbnail 
+      + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model
+      + ' on a white background"></a>'
       grid += '<div class="namePrice">'
-      /*grid += '<hr />'*/
       grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
+      grid += '<a href="../../inv/detail/' + vehicle.inv_id + '" title="View ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">'
       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
       grid += '</h2>'
-      grid += '<span>$' 
-      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
+      grid += '<span>$' + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
       grid += '</div>'
       grid += '</li>'
     })
@@ -60,9 +58,62 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+    req.cookies.jwt,
+    process.env.ACCESS_TOKEN_SECRET,
+    function (err, accountData) {
+      if (err) {
+        req.flash("notice", "Please log in")
+        res.clearCookie("jwt")
+        return res.redirect("/account/login")
+      }
+      res.locals.accountData = accountData
+      res.locals.loggedin = true
+      Util.checkEmployeeOrAdmin(res);
+      next()
+    })
+  } else {
+    next()
+  }
+}
+
+/* ****************************************
+ * Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* ****************************************
+ * Check if account type is "Employee" or "Admin" and set a local variable
+ * *************************************** */
+Util.checkEmployeeOrAdmin = function (res) {
+  if (res.locals.loggedin && (res.locals.accountData.account_type === "Employee" || res.locals.accountData.account_type === "Admin")) {
+    res.locals.isEmployeeOrAdmin = true;
+    return true;
+  }
+  res.locals.isEmployeeOrAdmin = false;
+  return false;
+}
+
+/* ****************************************
+ * Middleware For Handling Errors
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
 /* **************************************
-* Build the vehicle detail view HTML 
-* ************************************ */
+ * Build the single vehicle detail view HTML
+ * ************************************ */
 Util.buildDetailView = function(vehicle) {
   if (!vehicle) {
     return '<p class="notice">Sorry, no matching vehicle could be found.</p>';
@@ -88,13 +139,8 @@ Util.buildDetailView = function(vehicle) {
 }
 
 /* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
- **************************************** */
-Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
-
-// classification list builder for dropdown menu in add-inventory view
+ * Build a list of classifications for the inventory management view
+ * *************************************** */
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications()
   let classificationList = '<select name="classification_id" id="classificationList" required>'
@@ -103,7 +149,7 @@ Util.buildClassificationList = async function (classification_id = null) {
     classificationList += '<option value="' + row.classification_id + '"'
     if (
       classification_id != null &&
-      Number(row.classification_id) === Number(classification_id)
+      row.classification_id == classification_id
     ) {
       classificationList += " selected "
     }
@@ -112,41 +158,6 @@ Util.buildClassificationList = async function (classification_id = null) {
   classificationList += "</select>"
   return classificationList
 }
-
-/* ****************************************
-* Middleware to check token validity
-**************************************** */
-Util.checkJWTToken = (req, res, next) => {
- if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
-   function (err, accountData) {
-    if (err) {
-     req.flash("Please log in")
-     res.clearCookie("jwt")
-     return res.redirect("/account/login")
-    }
-    res.locals.accountData = accountData
-    res.locals.loggedin = 1
-    next()
-   })
- } else {
-  next()
- }
-}
-
-/* ****************************************
- *  Check Login
- * ************************************ */
- Util.checkLogin = (req, res, next) => {
-  if (res.locals.loggedin) {
-    next()
-  } else {
-    req.flash("notice", "Please log in.")
-    return res.redirect("/account/login")
-  }
- }
 
 module.exports = Util
 
