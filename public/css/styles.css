@@ -425,6 +425,42 @@ th {
     color: var(--text-main);
 }
 
+/* LIST OF VEHICLES */
+
+#inventoryDisplay {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#inventoryDisplay th,
+#inventoryDisplay td {
+  border: 2px solid var(--primary-bg);
+  padding: 8px;
+  text-align: left;
+}
+
+#inventoryDisplay th {
+  background-color: var(--primary-bg);
+  color: var(--text-light);
+  /* font-size: 18px; */
+}
+
+#inventoryDisplay thead td {
+  background-color: var(--primary-bg);
+}
+
+#inventoryDisplay td a {
+  color: var(--primary-bg);
+}
+
+#inventoryDisplay tbody td,
+#inventoryDisplay tbody a
+{
+  font-size: 14px;
+}
+
+
 
 /* ===== RESPONSIVE ≥800px ===== */
 @media (min-width: 800px) {
@@ -553,9 +589,9 @@ th {
   }
 
   form button[type="submit"] {
-    min-width: 140px;
+    min-width: 180px;
     font-size: 20px;
-    padding: 6px;
+    padding: 10px;
     border-radius: 9999px;
   }
 
@@ -576,6 +612,18 @@ th {
 
   #classificationList {
     font-size: 16px;
+  }
+
+  /* LIST OF VEHICLES */
+
+  #inventoryDisplay th {
+    font-size: 22px;
+  }
+
+  #inventoryDisplay tbody td,
+  #inventoryDisplay tbody a
+  {
+    font-size: 18px;
   }
 
 }
