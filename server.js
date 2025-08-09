@@ -18,7 +18,7 @@ const utilities = require("./utilities/index")
 const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
-
+const favoritesRouter = require("./routes/favoritesRoute");
 
 /* ***********************
  * Middleware
@@ -73,6 +73,8 @@ app.use("/inv", inventoryRoute)
 // Account route
 app.use("/account", accountRoute)
 //Intentional Error Route
+// Favorites route
+app.use("/favorites", favoritesRouter)
 app.get("/error-test", utilities.handleErrors(baseController.triggerError))
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

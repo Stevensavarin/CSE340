@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const favoritesModel = require("../models/favorites-model")
+
 
 const invCont = {}
 
@@ -32,12 +34,15 @@ invCont.buildDetailView = async function (req, res, next) {
   if (!vehicle) {
     return next({ status: 404 });
   }
-  const detail = utilities.buildDetailView(vehicle);
+  const userId = res.locals.accountData ? res.locals.accountData.account_id : null
+  const isFavorite = userId ? await favoritesModel.isFavorite(userId, inv_id) : false
+  const detail = utilities.buildDetailView(vehicle, isFavorite);
   let nav = await utilities.getNav();
   const title = `${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}`;
   res.render("./inventory/detail", {
     title,
     nav,
+    isFavorite,
     detail,
     errors: null,
   });

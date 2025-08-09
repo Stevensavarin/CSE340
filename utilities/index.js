@@ -1,3 +1,4 @@
+const { isFavorite } = require("../models/favorites-model")
 const invModel = require("../models/inventory-model")
 const Util = {}
 const jwt = require("jsonwebtoken")
@@ -58,6 +59,39 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
+/* **************************************
+* Build the favorites view HTML
+* ************************************ */
+Util.buildFavoritesGrid = async function (data) {
+  let grid
+  if (data.length > 0) {
+    grid = '<ul id="inv-display">'
+    data.forEach(vehicle => {
+      grid += '<li>'
+      grid += '<a href="../../inv/detail/' + vehicle.inv_id
+        + '" title="View ' + vehicle.inv_make + ' ' + vehicle.inv_model
+        + ' details"><img src="' + vehicle.inv_thumbnail
+        + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model
+        + ' on CSE Motors" /></a>'
+      grid += '<div class="namePrice">'
+      grid += '<hr />'
+      grid += '<h2>'
+      grid += '<a href="../../inv/detail/' + vehicle.inv_id + '" title="View '
+        + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">'
+        + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
+      grid += '</h2>'
+      grid += '<span>$'
+        + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
+      grid += '</div>'
+      grid += '</li>'
+    })
+    grid += '</ul>'
+  } else {
+    grid = '<p class="notice">You don\'t have any vehicles marked as favorite.</p>'
+  }
+  return grid
+}
+
 /* ****************************************
 * Middleware to check token validity
 **************************************** */
@@ -114,27 +148,35 @@ Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)
 /* **************************************
  * Build the single vehicle detail view HTML
  * ************************************ */
-Util.buildDetailView = function(vehicle) {
+Util.buildDetailView = function(vehicle, isFavorite) {
   if (!vehicle) {
     return '<p class="notice">Sorry, no matching vehicle could be found.</p>';
   }
+
+  const favButtonLabel = isFavorite ? "Remove Favorite ❌" : "Add Favorite ❤️";
+
   let detail = '<div class="vehicle-detail">';
-  detail += `<div class="vehicle-image-container">`
+  detail += `<div class="vehicle-image-container">`;
   detail += `<p>This vehicle has passed inspection by an ASE-certified technician.</p>`;
   detail += `<img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">`;
   detail += `</div>`;
   detail += `<div class="vehicle-info-container">`;
-  detail += `<div class="price-tag">`
+  detail += `<div class="price-tag">`;
   detail += `<h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>`;
   detail += `<p><strong>Price:</strong> $${new Intl.NumberFormat('en-US').format(vehicle.inv_price)}</p>`;
   detail += `</div>`;
-  detail += `<div class="description-tag">`
+  detail += `<div class="description-tag">`;
   detail += `<p><strong>Description:</strong> ${vehicle.inv_description}</p>`;
   detail += `<p><strong>Color:</strong> ${vehicle.inv_color}</p>`;
   detail += `<p><strong>Miles:</strong> ${new Intl.NumberFormat('en-US').format(vehicle.inv_miles)}</p>`;
   detail += `</div>`;
+  detail += `<form action="/favorites/toggle" method="POST" class="fav-form">`;
+  detail += `<input type="hidden" name="inv_id" value="${vehicle.inv_id}">`;
+  detail += `<button type="submit" class="btn-fav">${favButtonLabel}</button>`;
+  detail += `</form>`;
   detail += `</div>`;
   detail += '</div>';
+
   return detail;
 }
 
