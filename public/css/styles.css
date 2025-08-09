@@ -558,6 +558,15 @@ th {
   color: var(--text-light);
 }
 
+/* FAVORITES */
+.fav-form {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: inline;
+}
+
 /* ===== RESPONSIVE ≥800px ===== */
 @media (min-width: 800px) {
   body {
